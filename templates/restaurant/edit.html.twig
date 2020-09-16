@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Restaurant{% endblock %}
+
+{% block body %}
+    <style>
+        .create-wrapper {
+            margin: 5%;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+            text-align: center;
+            padding: 5%;
+        }
+
+        .create-label {
+            width: 150px;
+        }
+
+        .create-label-active {
+            width: 150px;
+            display: inline-flex;
+        }
+
+        .create-title-container {
+            padding-bottom: 20px;
+        }
+
+        .create-button-container {
+            padding-top: 20px;
+        }
+        .create-checkbox {
+            height: 30px;
+            width: 15%;
+        }
+    </style>
+
+    <div class="create-wrapper">
+        <form method="post">
+            {#        {% if error %}#}
+            {#            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
+            {#        {% endif %}#}
+
+
+            <h1 class="create-title-container">Edit Restaurant {{ restaurant.getTitle() }}</h1>
+            <div>
+                <label class="create-label" for="title">Title</label>
+                <input type="text" name="title" id="title" required autofocus value="{{ restaurant.getTitle() }}">
+            </div>
+            <div>
+                <label class="create-label" for="photo">Photo URL</label>
+                <input type="text" name="photo" id="photo" required value="{{ restaurant.getPhoto() }}">
+            </div>
+            <div>
+                <label class="create-label" for="max_table_count">Max Table Count</label>
+                <input type="text" name="max_table_count" id="max_table_count" required value="{{ restaurant.getMaxTableCount() }}">
+            </div>
+            <div>
+                <label class="create-label-active" for="status_active">Active</label>
+                <input class="create-checkbox" type="checkbox" name="status_active" id="status_active" {% if restaurant.getStatusActive() %}checked{% endif %}>
+            </div>
+
+            {#        <input type="hidden" name="_csrf_token"#}
+            {#               value="{{ csrf_token('authenticate') }}"#}
+            {#        >#}
+            <div class="create-button-container">
+                <button class="btn btn-primary px-5" type="submit">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
