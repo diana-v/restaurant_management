@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Restaurant{% endblock %}
+{% block title %}Edit Restaurant Table{% endblock %}
 
 {% block body %}
     <style>
@@ -38,33 +38,33 @@
     </style>
 
     <div class="container">
+        {% if error is defined %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
         <form method="post">
-            <p><a href="/restaurant">
+            <p><a href="/restaurant/{{ restaurant_id }}/table">
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor"
                          xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"
                               d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                     </svg>
-                    Back to restaurants overview</a></p>
+                    Back to restaurant tables</a></p>
             <div class="form-wrapper">
-                <h1 class="form-title-container">Edit restaurant: {{ restaurant.getTitle() }}</h1>
+                <h1 class="form-title-container">Editing {{ restaurant.getTitle() }}
+                    table {{ restaurant_table.getNumber() }}</h1>
                 <div>
-                    <label class="form-label" for="title">Title</label>
-                    <input type="text" name="title" id="title" required autofocus value="{{ restaurant.getTitle() }}">
+                    <label class="form-label" for="capacity">Capacity</label>
+                    <input type="text" name="capacity" id="capacity" required autofocus
+                           value="{{ restaurant_table.getCapacity() }}">
                 </div>
                 <div>
-                    <label class="form-label" for="photo">Photo URL</label>
-                    <input type="text" name="photo" id="photo" required value="{{ restaurant.getPhoto() }}">
-                </div>
-                <div>
-                    <label class="form-label" for="max_table_count">Max Table Count</label>
-                    <input type="text" name="max_table_count" id="max_table_count" required
-                           value="{{ restaurant.getMaxTableCount() }}">
+                    <label class="form-label" for="number">Number</label>
+                    <input type="text" name="number" id="number" required value="{{ restaurant_table.getNumber() }}">
                 </div>
                 <div>
                     <label class="form-label-active" for="status_active">Active</label>
                     <input class="form-checkbox" type="checkbox" name="status_active" id="status_active"
-                           {% if restaurant.getStatusActive() %}checked{% endif %}>
+                           {% if restaurant_table.getStatusActive() %}checked{% endif %}>
                 </div>
                 <div class="form-button-container">
                     <button class="btn btn-primary px-5" type="submit">

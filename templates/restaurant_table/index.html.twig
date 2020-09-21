@@ -10,20 +10,21 @@
             text-align: center;
         }
 
+        .table-navbar {
+            height: 75px;
+        }
+
+        .table-navbar-create {
+            box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+            background-color: white;
+        }
+
         .table-checkbox {
             height: calc(1.5em + .75rem + 2px);
             width: 100%;
         }
 
-        .table-photo {
-            width: 100px;
-        }
-
         @media screen and (min-width: 940px) {
-            .button-search:before {
-                content: 'Search';
-            }
-
             .button-create:before {
                 content: 'New Entry';
             }
@@ -36,18 +37,8 @@
                 content: 'Delete';
             }
 
-            .button-view-tables:before {
-                content: 'View Tables';
-            }
-        }
-
-        @media screen and (max-width: 940px) {
-            .table-wrapper {
-                overflow: scroll;
-            }
-
-            .search-input {
-                width: 225px;
+            .button-view:before {
+                content: 'View';
             }
         }
     </style>
@@ -60,22 +51,9 @@
     <div class="table-wrapper">
         <nav class="navbar navbar-dark bg-dark justify-content-between table-navbar">
             <a class="navbar-brand" href="/restaurant"><b>Restaurant Management</b></a>
-            <form class="form-inline" action="/restaurant/search" method="post">
-                <input class="form-control mr-sm-1 search-input" type="search" placeholder="Enter title here..."
-                       aria-label="Search"
-                       name="search">
-                <button class="btn btn-light my-2 my-sm-0 mr-sm-1 button-search" type="submit">
-                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                              d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
-                        <path fill-rule="evenodd"
-                              d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
-                    </svg>
-                </button>
-            </form>
-            <a href="/restaurant/create">
-                <button type="button" class="btn btn-light button-create mr-sm-1">
+            <a class="navbar-brand"><b>{{ restaurant.getTitle() }}: Tables</b></a>
+            <a href="/restaurant/{{ restaurant_id }}/table/create">
+                <button type="button" class="btn table-navbar-create button-create">
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus" fill="currentColor"
                          xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"
@@ -89,25 +67,23 @@
             <thead class="thead-dark">
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Photo</th>
-                <th scope="col">Max Table Count</th>
+                <th scope="col">Capacity</th>
+                <th scope="col">Number</th>
                 <th scope="col">Active</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
             <tbody>
-            {% for restaurant in restaurants %}
+            {% for table in restaurant_table %}
                 <tr>
-                    <th scope="row" class="align-middle">{{ restaurant.getId() }}</th>
-                    <td class="align-middle">{{ restaurant.getTitle() }}</td>
-                    <td class="align-middle"><img class="table-photo" src="{{ restaurant.getPhoto() }}"></td>
-                    <td class="align-middle">{{ restaurant.getMaxTableCount() }}</td>
-                    <td class="align-middle"><input type="checkbox" class="table-checkbox" disabled
-                                                    {% if restaurant.getStatusActive() %}checked{% endif %}></td>
-                    <td class="align-middle">
-                        <a href="/restaurant/edit/{{ restaurant.getId() }}">
-                            <button type="button" class="btn btn-primary button-edit m-1">
+                    <th scope="row">{{ table.getId() }}</th>
+                    <td>{{ table.getCapacity() }}</td>
+                    <td>{{ table.getNumber() }}</td>
+                    <td><input type="checkbox" class="table-checkbox" disabled
+                               {% if table.getStatusActive() %}checked{% endif %}></td>
+                    <td>
+                        <a href="/restaurant/{{ restaurant_id }}/table/edit/{{ table.getId() }}">
+                            <button type="button" class="btn btn-primary button-edit">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil"
                                      fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd"
@@ -115,8 +91,8 @@
                                 </svg>
                             </button>
                         </a>
-                        <a href="/restaurant/delete/{{ restaurant.getId() }}">
-                            <button type="button" class="btn btn-danger button-delete m-1">
+                        <a href="/restaurant/{{ restaurant_id }}/table/delete/{{ table.getId() }}">
+                            <button type="button" class="btn btn-danger button-delete">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash"
                                      fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
@@ -125,8 +101,8 @@
                                 </svg>
                             </button>
                         </a>
-                        <a href="/restaurant/{{ restaurant.getId() }}/table">
-                            <button type="button" class="btn btn-secondary button-view-tables m-1">
+                        <a href="/restaurant/{{ restaurant_id }}/table/view/{{ table.getId() }}">
+                            <button type="button" class="btn btn-secondary button-view">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye" fill="currentColor"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd"

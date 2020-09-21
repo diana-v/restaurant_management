@@ -19,22 +19,15 @@ class RestaurantRepository extends ServiceEntityRepository
         parent::__construct($registry, Restaurant::class);
     }
 
-    // /**
-    //  * @return Restaurant[] Returns an array of Restaurant objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Restaurant[] Returns an array of Restaurant objects
+     */
+    public function findAllRestaurantsAsArray()
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
-    */
 
     public function findRestaurantByTitle($value)
     {
@@ -43,7 +36,6 @@ class RestaurantRepository extends ServiceEntityRepository
             ->setParameter('val', "%$value%")
             ->orderBy('r.id', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 }

@@ -23,6 +23,7 @@
             padding-top: 20px;
         }
     </style>
+
     {% if app.user %}
         <div class="mb-1 text-right pr-5 pt-3">
             You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
@@ -33,8 +34,6 @@
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
-
-
             <h1 class="login-title-container">Sign in</h1>
             <div>
                 <label class="login-label" for="inputEmail">Email</label>
@@ -49,9 +48,12 @@
                    value="{{ csrf_token('authenticate') }}"
             >
             <div class="login-button-container">
-            <button class="btn btn-primary px-5" type="submit">
-                Sign in
-            </button>
+                <button class="btn btn-primary px-5 mb-3" type="submit">
+                    Sign in
+                </button>
+                <div>
+                    Not a registered yet? <a href="/register">Sign up here</a>
+                </div>
             </div>
         </form>
     </div>
